@@ -1,0 +1,141 @@
+<?php 
+
+require_once("config.php");
+
+if(isset($_POST['login'])){
+
+    $nama = filter_input(INPUT_POST, 'nama', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+
+    $sql = "SELECT * FROM users WHERE nama=:nama OR email=:email";
+    $stmt = $db->prepare($sql);
+    
+    // bind parameter ke query
+    $params = array(
+        ":nama" => $nama,
+        ":email" => $nama
+    );
+
+    $stmt->execute($params);
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // jika user terdaftar
+    if($user){
+        // verifikasi password
+        if(password_verify($password, $user["password"])){
+            // buat Session
+            session_start();
+            $_SESSION["user"] = $user;
+            // login sukses, alihkan ke halaman timeline
+            header("Location: timeline.php");
+        }
+    }
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="bootstrap/css/style.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="fontawesome/css/fontawesome.min.css">
+</head>
+
+<body>
+    <!--Awal Nav-->
+    <nav class="navbar navbar-expand-lg navbar-light" Style="background-color:#79C67B">
+        <a class="navbar-brand " href="index.php">Tika Catering</a>
+    </nav>
+    <!--BatasNav-->
+    <div class="align-self-center">
+        <form action="" method="post">
+            <div class="col-md-4 col-md-offset-4 kotak">
+                <h3>Silahkan Login ..</h3>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                    <input type="text" class="form-control" placeholder="Username" name="uname">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                    <input type="password" class="form-control" placeholder="Password" name="pass">
+                </div>
+                <div class="input-group">
+                    <input type="submit" class="btn btn-primary" value="Login">
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+</body>
+<!--INI BAGIAN AWAL FOOTER-->
+<footer>
+    <div class="top-footer" Style=" background-color:#79c67b">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-sm-4 footer-logo">
+                    <br>
+                    <figure>
+                        <a class="img-responsive" title='Madang' rel='home'><img src='bootstrap/img/tika.png'
+                                alt='Madang' width="250" height="100"></a>
+                    </figure>
+                </div>
+                <div class="col-md-3 mb-md-0 mb-3">
+                    <div class="border-bottom-0">
+                        <ul>
+                            <br>
+                            <a href="#!">Link 1</a>
+                        </ul>
+                        <ul>
+                            <a href="#!">Link 1</a>
+                        </ul>
+                        <ul>
+                            <a href="#!">Link 1</a>
+                        </ul>
+                        <ul>
+                            <a href="#!">Link 1</a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="background-color: #429C44" width="150" height="150">
+        <br>
+        <div class="col-12">
+            <div class="text-white">
+                <div class="copyright-text text-center">&copy;2019 Medan, Inc. ALL
+                    RIGHT RESERVED.</div>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--INI BAGIAN AKHIR FOOTER-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+</script>
+
+</html>
